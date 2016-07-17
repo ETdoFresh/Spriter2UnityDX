@@ -233,7 +233,21 @@ namespace Spriter2UnityDX.Animations {
 					kfsActive.Add (new Keyframe (key.time, 0f, inf, inf));
 					active = false;
 				}
-			} //Only add these curves if there is actually a mutation
+			} 
+            
+            // Adds an initial keyframe in case different animations have different z orders that never mutate
+            if (kfsZ.Count == 0)
+            {
+                clip.SetCurve(childPath, typeof(Transform), "localPosition.z", new AnimationCurve(new Keyframe(0f, defaultZ, inf, inf)));
+                if (!positionChanged)
+                {
+                    var info = timeLine.keys[0].info; //If these curves don't actually exist, add some empty ones
+                    clip.SetCurve(childPath, typeof(Transform), "localPosition.x", new AnimationCurve(new Keyframe(0f, info.x)));
+                    clip.SetCurve(childPath, typeof(Transform), "localPosition.y", new AnimationCurve(new Keyframe(0f, info.y)));
+                }
+            }
+
+            //Only add these curves if there is actually a mutation
 			if (kfsZ.Count > 0) {
 				clip.SetCurve (childPath, typeof(Transform), "localPosition.z", new AnimationCurve (kfsZ.ToArray ()));
 				if (!positionChanged) {

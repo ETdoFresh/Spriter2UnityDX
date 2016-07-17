@@ -80,6 +80,7 @@ namespace Spriter2UnityDX {
 		}
 
 		private void OnEnable () {
+            ApplySpriterZOrder = applySpriterZOrder;
 			DoForAll (x => x.enabled = true);
 		}
 
